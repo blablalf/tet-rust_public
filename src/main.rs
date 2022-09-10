@@ -29,8 +29,8 @@ impl AppState {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
-        const BACKGROUND: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        const FOREGROUND: [f32; 4] = [200.0, 0.0, 1.0, 1.0];
+        const BACKGROUND: [f32; 4] = [0.0, 0.0, 0.0, 1.0]; // Black color -> r, v, b, opacity
+        const FOREGROUND: [f32; 4] = [1.0, 0.0, 0.0, 1.0]; // Red color -> r, v, b, opacity
 
         let start_pos_x = self.start_pos_x as f64;
         let start_pos_y = self.start_pos_y as f64;
@@ -62,7 +62,7 @@ fn main() {
     let opengl = OpenGL::V4_5;
 
     // Defining our window and its parameters
-    let mut window: GlutinWindow = WindowSettings::new("Tetrus", [512, 1024])
+    let mut window: GlutinWindow = WindowSettings::new("Tetrust", [512, 1024])
         .exit_on_esc(true)
         .build()
         .unwrap();

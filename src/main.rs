@@ -20,13 +20,13 @@ const SQUARE_SIZE: u32 = 40; // Side size in pixels of a square into the grid
 const GRID_WIDTH: u32 = 10; // Width of the grid in square unit
 const GRID_HEIGTH: u32 = 22; // Width of the grid in square unit
 
-
 pub struct AppState{
     gl: GlGraphics,
     score: i32,
     piece_speed: i32, // Speed of the descent of the current piece to place
     pos_x: i32, // x axis coordinate of the piece apparitions
-    pos_y: i32// y axis coordinate of the piece apparitions
+    pos_y: i32,// y axis coordinate of the piece apparitions
+    grid: [[i8; 10]; 22]
 }
 
 impl AppState {
@@ -40,14 +40,23 @@ impl AppState {
         let pos_y = self.pos_y as f64;
 
         // We wont draw it currently -> (TO DO)
-        let piece = rectangle::square(0.0, 0.0, SQUARE_SIZE as f64); // x -> x starting position | y -> y starting position
-        //let piece_x = self.piece_x as f64;
-        //let piece_y = self.piece_y as f64;
+        let square = rectangle::square(0.0, 0.0, SQUARE_SIZE as f64); // x -> x starting position | y -> y starting position
 
         // function included inside our opengl lib, when we will draw our window and everything, let's draw 
         self.gl.draw(args.viewport(), |c, gl| {
-            clear(BACKGROUND, gl);
-            rectangle(FOREGROUND, piece, c.transform.trans(pos_x, pos_y), gl); // transform to enlarge our piece shape
+            clear(BACKGROUND, gl); // clear the grid
+
+            // Writing the pieces already placed
+            for (line_index, line) in self.grid.iter().enumerate() { // for every line
+                for (case_index, case) in line.iter().enumerate() {
+                    if case != &0 {
+                        rectangle(FOREGROUND, square, c.transform.trans((case_index*SQUARE_SIZE as usize) as f64, (line_index*SQUARE_SIZE as usize) as f64), gl); // TO-DO -> put the correct color instead of Foreground
+                    }
+                }
+            }
+
+            // Draw the piece
+            rectangle(FOREGROUND, square, c.transform.trans(pos_x, pos_y), gl); // transform to enlarge our piece shape
         })
     }
 
@@ -130,7 +139,8 @@ fn main() {
         score: 0,
         piece_speed: 1,
         pos_x: ((GRID_WIDTH*SQUARE_SIZE)/2) as i32, // Starting piece position into x axis
-        pos_y: -4 * SQUARE_SIZE as i32 // Starting piece position into y axis
+        pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
+        grid: [[0; 10]; 22] // Define our grid to full blank case
     };
 
     // Let's init an event listener to react to the user and re-render in function of that
@@ -143,7 +153,6 @@ fn main() {
         }
         
         // TO-DO
-        
         if let Some(u) = e.update_args() {
             app_state.update(&u);
         }

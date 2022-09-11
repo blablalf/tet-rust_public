@@ -27,3 +27,8 @@ Our game must be as close as possible to the official spec (see `doc/`).
 * `git checkout -b feature/<your_feature>` to start a new branch 
 * code, commit, push
 * open a pull request on Github interface (it should display a huge button for that)
+
+
+
+## Personnal report
+* I inspired myself a lot from https://www.youtube.com/watch?v=-JIlCYbpNnI

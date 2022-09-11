@@ -6,6 +6,7 @@ extern crate piston;
 
 // I inspired myself a lot from https://www.youtube.com/watch?v=-JIlCYbpNnI
 
+use piston::UpdateEvent;
 // lets put some shortcuts that could be usefuls
 //use std::process; // Will be used later
 use piston::window::WindowSettings;
@@ -25,8 +26,8 @@ pub struct AppState{
     score: i32,
     piece_x_vel: i32, // we will consider this like the speed of our piece into the x axis
     piece_y_vel: i32, // same for y axis
-    start_pos_x: i32, // x axis coordinate of the piece apparitions
-    start_pos_y: i32// y axis coordinate of the piece apparitions
+    pos_x: i32, // x axis coordinate of the piece apparitions
+    pos_y: i32// y axis coordinate of the piece apparitions
 }
 
 impl AppState {
@@ -36,8 +37,8 @@ impl AppState {
         const BACKGROUND: [f32; 4] = [0.0, 0.0, 0.0, 1.0]; // Black color -> r, v, b, opacity
         const FOREGROUND: [f32; 4] = [1.0, 0.0, 0.0, 1.0]; // Red color -> r, v, b, opacity
 
-        let start_pos_x = self.start_pos_x as f64;
-        let start_pos_y = self.start_pos_y as f64;
+        let pos_x = self.pos_x as f64;
+        let pos_y = self.pos_y as f64;
 
         // We wont draw it currently -> (TO DO)
         let piece = rectangle::square(0.0, 0.0, SQUARE_SIZE as f64); // x -> x starting position | y -> y starting position
@@ -47,9 +48,14 @@ impl AppState {
         // function included inside our opengl lib, when we will draw our window and everything, let's draw 
         self.gl.draw(args.viewport(), |c, gl| {
             clear(BACKGROUND, gl);
-            rectangle(FOREGROUND, piece, c.transform.trans(start_pos_x, start_pos_y), gl); // transform to enlarge our piece shape
+            rectangle(FOREGROUND, piece, c.transform.trans(pos_x, pos_y), gl); // transform to enlarge our piece shape
         })
     }
+
+    fn update(&mut self, _args: &UpdateArgs) {
+        self.pos_y += 1;
+    }
+
 }
 
 fn main() {
@@ -77,12 +83,13 @@ fn main() {
         score: 0,
         piece_x_vel: 0,
         piece_y_vel: 0,
-        start_pos_x: 20, //
-        start_pos_y: 20
+        pos_x: 20, //
+        pos_y: 20
     };
 
     // Let's init an event listener to react to the user and re-render in function of that
     let mut events = Events::new(EventSettings::new());
+    
     
     while let Some(e) = events.next(&mut window) {
         if let Some(r) = e.render_args() {
@@ -90,11 +97,11 @@ fn main() {
         }
         
         // TO-DO
-        /* 
+        
         if let Some(u) = e.update_args() {
             app_state.update(&u);
         }
-        
+        /*
         // TO-DO
         if let Some(b) = e.press_args() {
             app_state.press(&b);

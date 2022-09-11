@@ -14,15 +14,19 @@ use piston::input::{Button, Key, PressEvent, ReleaseEvent, RenderArgs, RenderEve
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
 
+// Defining some constant
+const SQUARE_SIZE: u32 = 40; // Side size in pixels of a square into the grid
+const GRID_WIDTH: u32 = 10; // Width of the grid in square unit
+const GRID_LENGTH: u32 = 22; // Width of the grid in square unit
+
+
 pub struct AppState{
     gl: GlGraphics,
     score: i32,
     piece_x_vel: i32, // we will consider this like the speed of our piece into the x axis
     piece_y_vel: i32, // same for y axis
-    piece_x: i32,
-    piece_y: i32,
-    start_pos_x: i32,
-    start_pos_y: i32
+    start_pos_x: i32, // x axis coordinate of the piece apparitions
+    start_pos_y: i32// y axis coordinate of the piece apparitions
 }
 
 impl AppState {
@@ -36,7 +40,7 @@ impl AppState {
         let start_pos_y = self.start_pos_y as f64;
 
         // We wont draw it currently -> (TO DO)
-        let piece = rectangle::square(0.0, 0.0, 30.0); // x -> x starting position | y -> y starting position
+        let piece = rectangle::square(0.0, 0.0, SQUARE_SIZE as f64); // x -> x starting position | y -> y starting position
         //let piece_x = self.piece_x as f64;
         //let piece_y = self.piece_y as f64;
 
@@ -51,7 +55,7 @@ impl AppState {
 fn main() {
 
     // Testing printing
-    let game_name = "Tetrus";
+    let game_name = "Tet-rust";
     println!("Welcome to {} !", game_name);
 
 
@@ -62,7 +66,7 @@ fn main() {
     let opengl = OpenGL::V4_5;
 
     // Defining our window and its parameters
-    let mut window: GlutinWindow = WindowSettings::new("Tetrust", [512, 1024])
+    let mut window: GlutinWindow = WindowSettings::new(game_name, [GRID_WIDTH * SQUARE_SIZE, GRID_LENGTH * SQUARE_SIZE])
         .exit_on_esc(true)
         .build()
         .unwrap();
@@ -73,9 +77,7 @@ fn main() {
         score: 0,
         piece_x_vel: 0,
         piece_y_vel: 0,
-        piece_x: 11,
-        piece_y: 11,
-        start_pos_x: 20,
+        start_pos_x: 20, //
         start_pos_y: 20
     };
 

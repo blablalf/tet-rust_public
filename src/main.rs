@@ -16,9 +16,22 @@ use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
 
 // Defining some constant
+
+// SIZING
 const SQUARE_SIZE: u32 = 40; // Side size in pixels of a square into the grid
 const GRID_WIDTH: u32 = 10; // Width of the grid in square unit
 const GRID_HEIGTH: u32 = 22; // Width of the grid in square unit
+
+// COLORS (color -> r, v, b, opacity)
+const BACKGROUND: [f32; 4] = [0., 0., 0., 1.]; // Black
+const RED: [f32; 4] = [0.85, 0., 0.02, 1.]; // RED
+const YELLOW: [f32; 4] = [0.99, 0.89, 0.15, 1.]; // YELLOW
+const LIGHT_BLUE: [f32; 4] = [0.11, 0.87, 0.86, 1.]; // LIGHT_BLUE
+const BLUE: [f32; 4] = [0., 0., 0.86, 1.]; // BLUE color
+const ORANGE: [f32; 4] = [0.85, 0.52, 0.04, 1.]; // ORANGE color
+const GREEN: [f32; 4] = [0.12, 0.89, 0.02, 1.]; // GREEN color
+const PURPLE: [f32; 4] = [0.51, 0., 0.86, 1.]; // PURPLE color
+
 
 pub struct AppState{
     gl: GlGraphics,
@@ -32,9 +45,6 @@ pub struct AppState{
 impl AppState {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
-
-        const BACKGROUND: [f32; 4] = [0.0, 0.0, 0.0, 1.0]; // Black color -> r, v, b, opacity
-        const FOREGROUND: [f32; 4] = [1.0, 0.0, 0.0, 1.0]; // Red color -> r, v, b, opacity
 
         let pos_x = self.pos_x as f64;
         let pos_y = self.pos_y as f64;
@@ -50,13 +60,13 @@ impl AppState {
             for (line_index, line) in self.grid.iter().enumerate() { // for every line
                 for (case_index, case) in line.iter().enumerate() {
                     if case != &0 {
-                        rectangle(FOREGROUND, square, c.transform.trans((case_index*SQUARE_SIZE as usize) as f64, (line_index*SQUARE_SIZE as usize) as f64), gl); // TO-DO -> put the correct color instead of Foreground
+                        rectangle(RED, square, c.transform.trans((case_index*SQUARE_SIZE as usize) as f64, (line_index*SQUARE_SIZE as usize) as f64), gl); // TO-DO -> put the correct color instead of RED
                     }
                 }
             }
 
             // Draw the piece
-            rectangle(FOREGROUND, square, c.transform.trans(pos_x, pos_y), gl); // transform to enlarge our piece shape
+            rectangle(RED, square, c.transform.trans(pos_x, pos_y), gl); // transform to enlarge our piece shape
         })
     }
 

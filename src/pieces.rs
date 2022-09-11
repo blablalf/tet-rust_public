@@ -42,3 +42,7 @@ const PIECES: [[[u8; 4]; 4]; 7] = [
         [1, 1, 1, 0]    //  XXX
     ]
 ];
+
+pub struct piece {
+    
+}

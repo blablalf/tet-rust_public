@@ -4,6 +4,9 @@ extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
 
+// Other files import
+mod pieces;
+
 use piston::UpdateEvent;
 // lets put some shortcuts that could be usefuls
 //use std::process; // Will be used later

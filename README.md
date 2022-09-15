@@ -32,3 +32,6 @@ Our game must be as close as possible to the official spec (see `doc/`).
 
 ## Personnal report
 * I inspired myself a lot from https://www.youtube.com/watch?v=-JIlCYbpNnI
+
+## Questions
+* When am I able to just put a return value whitout the return keyword

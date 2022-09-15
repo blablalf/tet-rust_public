@@ -5,7 +5,7 @@ extern crate opengl_graphics;
 extern crate piston;
 
 // Other files import
-mod pieces;
+mod piece;
 mod constant;
 use crate::constant::BOXES_GRID_WIDTH;
 use crate::constant::BOXES_GRID_HEIGTH;
@@ -74,7 +74,7 @@ impl AppState {
             match key {
                 /*
                 Key::Up => {
-                    self.right_vel = -1;
+                    // rottaion
                 }
                 */
                 Key::Down => {

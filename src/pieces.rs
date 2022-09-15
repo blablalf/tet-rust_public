@@ -1,10 +1,105 @@
+enum PieceType {
+    /*
+        ##
+        ##
+     */
+    o_tetrimino ([[u8; 2]; 2]),
+
+    /*
+        #
+        #
+        #
+        #
+    */
+    i_tetrimino ([[u8; 4]; 4]),
+
+    /*
+         #
+        ###
+    */
+    t_tetrimino ([[u8; 3]; 3]),
+
+    /*
+        #
+        ###
+    */
+    l_tetrimino ([[u8; 3]; 3]),
+
+    /*
+          #
+        ###
+    */
+    j_tetrimino ([[u8; 3]; 3]),
+
+    /*
+         ##
+        ##
+    */
+    s_tetrimino ([[u8; 3]; 3]),
+
+    /*
+        ##
+         ##
+    */
+    z_tetrimino ([[u8; 3]; 3]),
+
+    // like tuple structs,
+    KeyPress(char),
+    Paste(String),
+    // or c-like structures.
+    Click { x: i64, y: i64 },
+}
+
+const O_TETRIMINO:PieceType = PieceType::o_tetrimino([
+    [1, 1], //  XX
+    [1, 1]  //  XX
+]);
+
+const I_TETRIMINO:PieceType = PieceType::i_tetrimino([
+    [0, 0, 0, 0],   //  X
+    [1, 1, 1, 1],   //  X
+    [0, 0, 0, 0],   //  X
+    [0, 0, 0, 0]    //  X
+]);
+
+const T_TETRIMINO:PieceType = PieceType::t_tetrimino([
+    [0, 0, 0],  //
+    [0, 1, 0],  //   X
+    [1, 1, 1]   //  XXX
+]);
+
+const L_TETRIMINO:PieceType = PieceType::l_tetrimino([
+    [0, 0, 1],  //    X
+    [1, 1, 1],  //  XXX
+    [0, 0, 0]   //
+]);
+
+const J_TETRIMINO:PieceType = PieceType::j_tetrimino([
+    [1, 0, 0],  //  X
+    [1, 1, 1],  //  XXX
+    [0, 0, 0]   //
+]);
+
+const S_TETRIMINO:PieceType = PieceType::s_tetrimino([
+    [0, 1, 1],   //   XX
+    [1, 1, 0],    //  XX
+    [0, 0, 0]   //
+]);
+
+const Z_TETRIMINO:PieceType = PieceType::z_tetrimino([
+    [1, 1, 0],   // XX
+    [0, 1, 1],    //  XX
+    [0, 0, 0]   //
+]);
+
 pub struct Piece {
     piece_matrix: Vec<Vec<i8>>,
     color: [f32; 4],
     pos_x: i32,
     pos_y: i32,
     placed: bool,
-    pieces: Vec<Vec<Vec<i8>>>
+    pieces: Vec<Vec<Vec<i8>>>,
+    pieceType: PieceType
 }
 
 impl Piece {
@@ -30,44 +125,6 @@ impl Piece {
     fn is_square_colliding_right_side(&self, square_pos_x: i32, pixel_grid_width: u32) -> bool {
         square_pos_x >= pixel_grid_width as i32
     }
-
-    let pieces = vec![
-        vec![
-            vec![1, 1], //  XX
-            vec![1, 1]  //  XX
-        ],
-        vec![
-            vec![0, 1, 0, 0],   //  X
-            vec![0, 1, 0, 0],   //  X
-            vec![0, 1, 0, 0],   //  X
-            vec![0, 1, 0, 0]    //  X
-        ],
-        vec![
-            vec![0, 0, 0],   //
-            vec![0, 1, 1],   //   XX
-            vec![1, 1, 0]    //  XX
-        ],
-        vec![
-            vec![0, 0, 0],   //
-            vec![1, 1, 0],   // XX
-            vec![0, 1, 1]    //  XX
-        ],
-        vec![
-            vec![0, 0, 0],  //  
-            vec![1, 0, 0],  //  X
-            vec![1, 1, 1]   //  XXX
-        ],
-        vec![
-            vec![0, 0, 0],  //
-            vec![0, 0, 1],  //    X
-            vec![1, 1, 1]   //  XXX
-        ],
-        vec![
-            vec![0, 0, 0],  //
-            vec![0, 1, 0],  //   X
-            vec![1, 1, 1]   //  XXX
-        ];
-];
 
     /*
          TO DO

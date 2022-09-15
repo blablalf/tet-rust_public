@@ -45,8 +45,6 @@ pub struct AppState{
     gl: GlGraphics,
     score: i32,
     piece_speed: i32, // Speed of the descent of the current piece to place
-    pos_x: i32, // x axis coordinate of the piece apparitions
-    pos_y: i32,// y axis coordinate of the piece apparitions
     grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize],
     current_piece: Piece
 }
@@ -55,8 +53,8 @@ impl AppState {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
-        let pos_x = self.pos_x as f64;
-        let pos_y = self.pos_y as f64;
+        let pos_x = self.current_piece.pos_x as f64;
+        let pos_y = self.current_piece.pos_y as f64;
 
         // We wont draw it currently -> (TO DO)
         let square = rectangle::square(0.0, 0.0, SQUARE_SIZE as f64); // x -> x starting position | y -> y starting position
@@ -88,11 +86,9 @@ impl AppState {
 
     // Updating data
     fn update(&mut self, _args: &UpdateArgs) {
-        if self.pos_y+self.piece_speed <= (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32 { // We don't want that the piece throw down of our window
-            self.pos_y += self.piece_speed;
-        } else if self.pos_y+self.piece_speed > (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32 {
-            self.current_piece.pos_y = (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32;
-            self.current_piece.autoSetPlaced(self.grid);
+        // We don't want that the piece throw down of our window
+        if !self.current_piece.autoSetPlaced(self.grid, self.current_piece.pos_y + self.piece_speed) {
+            self.current_piece.pos_y += self.piece_speed;
         }
     }
 
@@ -102,20 +98,20 @@ impl AppState {
             match key {
                 /*
                 Key::Up => {
-                    // rottaion
+                    // rotation
                 }
                 */
                 Key::Down => {
                     self.piece_speed += 2;
                 }
                 Key::Left => {
-                    if self.pos_x > 0 { // We don't want that the piece run away from the left of our window
-                        self.pos_x -= SQUARE_SIZE as i32;
+                    if self.current_piece.pos_x > 0 { // We don't want that the piece run away from the left of our window
+                        self.current_piece.pos_x -= SQUARE_SIZE as i32;
                     }
                 }
                 Key::Right => {
-                    if self.pos_x < (PIXEL_GRID_WIDTH-SQUARE_SIZE) as i32 { // We don't want that the piece run away from the right of our window
-                        self.pos_x += SQUARE_SIZE as i32;
+                    if self.current_piece.pos_x < (PIXEL_GRID_WIDTH-SQUARE_SIZE) as i32 { // We don't want that the piece run away from the right of our window
+                        self.current_piece.pos_x += SQUARE_SIZE as i32;
                     }
                 }
                 _ => {}
@@ -163,13 +159,11 @@ fn main() {
         gl: GlGraphics::new(opengl),
         score: 0,
         piece_speed: 1,
-        pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
-        pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
         grid: [[0; 10]; 22], // Define our grid to full blank case
         current_piece: Piece{
             color: RED, 
-            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32,
-            pos_y: -4 * SQUARE_SIZE as i32,
+            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
+            pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
             placed: false,
             matrix: T_TETRIMINO}
     };

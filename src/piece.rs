@@ -2,11 +2,11 @@ use crate::constant::BOXES_GRID_WIDTH;
 use crate::constant::BOXES_GRID_HEIGTH;
 
 pub struct Piece {
-    color: [f32; 4],
-    pos_x: i32,
-    pos_y: i32,
-    placed: bool,
-    matrix: [[u8; 4]; 4]
+    pub color: [f32; 4],
+    pub pos_x: i32,
+    pub pos_y: i32,
+    pub placed: bool,
+    pub matrix: [[u8; 4]; 4]
 }
 
 impl Piece {

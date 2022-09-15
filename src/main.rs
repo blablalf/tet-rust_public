@@ -6,14 +6,31 @@ extern crate piston;
 
 // Other files import
 mod piece;
+use std::usize;
+
+use crate::piece::Piece;
+
 mod constant;
+
+// Important values
 use crate::constant::BOXES_GRID_WIDTH;
 use crate::constant::BOXES_GRID_HEIGTH;
 use crate::constant::SQUARE_SIZE;
 use crate::constant::BACKGROUND;
-use crate::constant::RED;
 use crate::constant::PIXEL_GRID_HEIGTH;
 use crate::constant::PIXEL_GRID_WIDTH;
+
+// Colors
+use crate::constant::RED;
+
+// Pieces
+use crate::constant::T_TETRIMINO;
+use crate::constant::O_TETRIMINO;
+use crate::constant::I_TETRIMINO;
+use crate::constant::L_TETRIMINO;
+use crate::constant::J_TETRIMINO;
+use crate::constant::S_TETRIMINO;
+use crate::constant::Z_TETRIMINO;
 
 use piston::UpdateEvent;
 // lets put some shortcuts that could be usefuls
@@ -30,7 +47,8 @@ pub struct AppState{
     piece_speed: i32, // Speed of the descent of the current piece to place
     pos_x: i32, // x axis coordinate of the piece apparitions
     pos_y: i32,// y axis coordinate of the piece apparitions
-    grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize]
+    grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize],
+    current_piece: Piece
 }
 
 impl AppState {
@@ -57,7 +75,14 @@ impl AppState {
             }
 
             // Draw the piece
-            rectangle(RED, square, c.transform.trans(pos_x, pos_y), gl); // transform to enlarge our piece shape
+            for (line_index, line) in self.current_piece.matrix.iter().enumerate() {
+                for (case_index, case) in line.iter().enumerate() {
+                    if *case != 0 {
+                        rectangle(RED, square, c.transform.trans(pos_x + (case_index as u32*SQUARE_SIZE) as f64, pos_y + (line_index as u32*SQUARE_SIZE) as f64), gl); // transform to enlarge our piece shape
+                    }
+                }
+            }
+            
         })
     }
 
@@ -137,7 +162,13 @@ fn main() {
         piece_speed: 1,
         pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
         pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
-        grid: [[0; 10]; 22] // Define our grid to full blank case
+        grid: [[0; 10]; 22], // Define our grid to full blank case
+        current_piece: Piece{
+            color: RED, 
+            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32,
+            pos_y: -4 * SQUARE_SIZE as i32,
+            placed: false,
+            matrix: S_TETRIMINO}
     };
 
     // Let's init an event listener to react to the user and re-render in function of that

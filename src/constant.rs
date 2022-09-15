@@ -18,49 +18,49 @@ pub const GREEN: [f32; 4] = [0.12, 0.89, 0.02, 1.]; // GREEN color
 pub const PURPLE: [f32; 4] = [0.51, 0., 0.86, 1.]; // PURPLE color
 
 // PIECES NORTH MATRIX
-const O_TETRIMINO: [[u8; 4]; 4] = [
+pub const O_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [0,1,1,0],  // XX
     [0,1,1,0],  // XX
     [0,0,0,0],  //
 ];
 
-const I_TETRIMINO: [[u8; 4]; 4] = [
+pub const I_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],   //
     [1,1,1,1],   //  XXXX
     [0,0,0,0],   //
     [0,0,0,0]    //
 ];
 
-const T_TETRIMINO: [[u8; 4]; 4] = [
+pub const T_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [1,1,1,0],  // XXX
     [0,1,0,0],  //  X
     [0,0,0,0],  //
 ];
 
-const L_TETRIMINO: [[u8; 4]; 4] = [
+pub const L_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [0,0,0,1],  //   X
     [1,1,1,1],  // XXX
     [0,0,0,0],  //
 ];
 
-const J_TETRIMINO: [[u8; 4]; 4] = [
+pub const J_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [1,0,0,0],  // X
     [1,1,1,1],  // XXX
     [0,0,0,0],  //
 ];
 
-const S_TETRIMINO: [[u8; 4]; 4] = [
+pub const S_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [0,1,1,0],  //  XX
     [1,1,0,0],  // XX
     [0,0,0,0],  //
 ];
 
-const Z_TETRIMINO: [[u8; 4]; 4] = [
+pub const Z_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [1,1,0,0],  // XX
     [0,1,1,0],  //  XX

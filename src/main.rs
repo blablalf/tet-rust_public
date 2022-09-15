@@ -88,8 +88,11 @@ impl AppState {
 
     // Updating data
     fn update(&mut self, _args: &UpdateArgs) {
-        if self.pos_y <= (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32 { // We don't want that the piece throw down of our window
+        if self.pos_y+self.piece_speed <= (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32 { // We don't want that the piece throw down of our window
             self.pos_y += self.piece_speed;
+        } else if self.pos_y+self.piece_speed > (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32 {
+            self.current_piece.pos_y = (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32;
+            self.current_piece.autoSetPlaced(self.grid);
         }
     }
 
@@ -168,7 +171,7 @@ fn main() {
             pos_x: ((PIXEL_GRID_WIDTH)/2) as i32,
             pos_y: -4 * SQUARE_SIZE as i32,
             placed: false,
-            matrix: S_TETRIMINO}
+            matrix: T_TETRIMINO}
     };
 
     // Let's init an event listener to react to the user and re-render in function of that

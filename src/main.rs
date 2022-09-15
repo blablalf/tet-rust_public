@@ -6,6 +6,14 @@ extern crate piston;
 
 // Other files import
 mod pieces;
+mod constant;
+use crate::constant::GRID_WIDTH;
+use crate::constant::GRID_HEIGTH;
+use crate::constant::SQUARE_SIZE;
+use crate::constant::BACKGROUND;
+use crate::constant::RED;
+use crate::constant::PIXEL_GRID_HEIGTH;
+use crate::constant::PIXEL_GRID_WIDTH;
 
 use piston::UpdateEvent;
 // lets put some shortcuts that could be usefuls
@@ -15,26 +23,6 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, Key, PressEvent, ReleaseEvent, RenderArgs, RenderEvent, UpdateArgs};
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
-
-// Defining some constant
-
-// SIZING
-const SQUARE_SIZE: u32 = 40; // Side size in pixels of a square into the grid
-const GRID_WIDTH: u32 = 10; // Width of the grid in square unit
-const GRID_HEIGTH: u32 = 22; // Width of the grid in square unit
-const PIXEL_GRID_WIDTH: u32 = GRID_WIDTH*SQUARE_SIZE; // Width of the grid in pixel unit
-const PIXEL_GRID_HEIGTH: u32 = GRID_HEIGTH*SQUARE_SIZE; // Width of the grid in pixel unit
-
-// COLORS -> r, v, b, opacity
-const BACKGROUND: [f32; 4] = [0., 0., 0., 1.]; // BLACK color
-const RED: [f32; 4] = [0.85, 0., 0.02, 1.]; // RED color
-const YELLOW: [f32; 4] = [0.99, 0.89, 0.15, 1.]; // YELLOW color
-const LIGHT_BLUE: [f32; 4] = [0.11, 0.87, 0.86, 1.]; // LIGHT_BLUE color
-const BLUE: [f32; 4] = [0., 0., 0.86, 1.]; // BLUE color
-const ORANGE: [f32; 4] = [0.85, 0.52, 0.04, 1.]; // ORANGE color
-const GREEN: [f32; 4] = [0.12, 0.89, 0.02, 1.]; // GREEN color
-const PURPLE: [f32; 4] = [0.51, 0., 0.86, 1.]; // PURPLE color
-
 
 pub struct AppState{
     gl: GlGraphics,

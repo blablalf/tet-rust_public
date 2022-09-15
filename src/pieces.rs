@@ -1,9 +1,13 @@
+use std::any;
+use crate::constant::GRID_WIDTH;
+use crate::constant::GRID_HEIGTH;
+
 enum PieceType {
     /*
         ##
         ##
      */
-    o_tetrimino ([[u8; 2]; 2]),
+    O_tetrimino ([[u8; 2]; 2]),
 
     /*
         #
@@ -11,37 +15,37 @@ enum PieceType {
         #
         #
     */
-    i_tetrimino ([[u8; 4]; 4]),
+    I_tetrimino ([[u8; 4]; 4]),
 
     /*
          #
         ###
     */
-    t_tetrimino ([[u8; 3]; 3]),
+    T_tetrimino ([[u8; 3]; 3]),
 
     /*
         #
         ###
     */
-    l_tetrimino ([[u8; 3]; 3]),
+    L_tetrimino ([[u8; 3]; 3]),
 
     /*
           #
         ###
     */
-    j_tetrimino ([[u8; 3]; 3]),
+    J_tetrimino ([[u8; 3]; 3]),
 
     /*
          ##
         ##
     */
-    s_tetrimino ([[u8; 3]; 3]),
+    S_tetrimino ([[u8; 3]; 3]),
 
     /*
         ##
          ##
     */
-    z_tetrimino ([[u8; 3]; 3]),
+    Z_tetrimino ([[u8; 3]; 3]),
 
     // like tuple structs,
     KeyPress(char),
@@ -50,45 +54,45 @@ enum PieceType {
     Click { x: i64, y: i64 },
 }
 
-const O_TETRIMINO:PieceType = PieceType::o_tetrimino([
+const O_TETRIMINO:PieceType = PieceType::O_tetrimino([
     [1, 1], //  XX
     [1, 1]  //  XX
 ]);
 
-const I_TETRIMINO:PieceType = PieceType::i_tetrimino([
-    [0, 0, 0, 0],   //  X
-    [1, 1, 1, 1],   //  X
-    [0, 0, 0, 0],   //  X
-    [0, 0, 0, 0]    //  X
+const I_TETRIMINO:PieceType = PieceType::I_tetrimino([
+    [0, 0, 0, 0],   //
+    [1, 1, 1, 1],   //  XXXX
+    [0, 0, 0, 0],   //
+    [0, 0, 0, 0]    //
 ]);
 
-const T_TETRIMINO:PieceType = PieceType::t_tetrimino([
+const T_TETRIMINO:PieceType = PieceType::T_tetrimino([
     [0, 0, 0],  //
     [0, 1, 0],  //   X
     [1, 1, 1]   //  XXX
 ]);
 
-const L_TETRIMINO:PieceType = PieceType::l_tetrimino([
+const L_TETRIMINO:PieceType = PieceType::L_tetrimino([
     [0, 0, 1],  //    X
     [1, 1, 1],  //  XXX
     [0, 0, 0]   //
 ]);
 
-const J_TETRIMINO:PieceType = PieceType::j_tetrimino([
+const J_TETRIMINO:PieceType = PieceType::J_tetrimino([
     [1, 0, 0],  //  X
     [1, 1, 1],  //  XXX
     [0, 0, 0]   //
 ]);
 
-const S_TETRIMINO:PieceType = PieceType::s_tetrimino([
-    [0, 1, 1],   //   XX
-    [1, 1, 0],    //  XX
+const S_TETRIMINO:PieceType = PieceType::S_tetrimino([
+    [0, 1, 1],  //   XX
+    [1, 1, 0],  //  XX
     [0, 0, 0]   //
 ]);
 
-const Z_TETRIMINO:PieceType = PieceType::z_tetrimino([
-    [1, 1, 0],   // XX
-    [0, 1, 1],    //  XX
+const Z_TETRIMINO:PieceType = PieceType::Z_tetrimino([
+    [1, 1, 0],  // XX
+    [0, 1, 1],  //  XX
     [0, 0, 0]   //
 ]);
 
@@ -126,10 +130,64 @@ impl Piece {
         square_pos_x >= pixel_grid_width as i32
     }
 
+    fn getPieceMatrix(piece_type: PieceType) -> PieceType {
+        match piece_type {
+            PieceType::O_tetrimino(_) => return O_TETRIMINO,
+            PieceType::I_tetrimino(_) => return I_TETRIMINO,
+            PieceType::T_tetrimino(_) => return T_TETRIMINO,
+            PieceType::L_tetrimino(_) => return L_TETRIMINO,
+            PieceType::J_tetrimino(_) => return J_TETRIMINO,
+            PieceType::S_tetrimino(_) => return S_TETRIMINO,
+            PieceType::Z_tetrimino(_) => return Z_TETRIMINO,
+            _ => return O_TETRIMINO
+        };
+    }
+
+    fn getPieceMatrixWithNumber(piece_type_index: u8) -> PieceType {
+        match piece_type_index {
+            0 => return O_TETRIMINO,
+            1 => return I_TETRIMINO,
+            2 => return T_TETRIMINO,
+            3 => return L_TETRIMINO,
+            4 => return J_TETRIMINO,
+            5 => return S_TETRIMINO,
+            6 => return Z_TETRIMINO,
+            _ => return O_TETRIMINO
+        };
+    }
+
+    fn getRightRotation22(matrix: [[u8; 2]; 2]) -> [[u8; 2]; 2] {
+        return [
+            [matrix[0][1], matrix[0][0]],
+            [matrix[1][1], matrix[0][1]]
+        ];
+    }
+
+    fn getRightRotation33(matrix: [[u8; 3]; 3]) -> [[u8; 3]; 3] {
+        return [
+            [matrix[2][0], matrix[1][0], matrix[0][0]],
+            [matrix[2][1], matrix[1][1], matrix[0][1]],
+            [matrix[2][2], matrix[1][2], matrix[0][2]],
+        ];
+    }
+
+    fn getRightRotation44(matrix: [[u8; 4]; 4]) -> [[u8; 4]; 4] {
+        return [
+            [matrix[3][0], matrix[2][0], matrix[1][0], matrix[0][0]],
+            [matrix[3][2], matrix[2][2], matrix[1][1], matrix[0][2]],
+            [matrix[3][3], matrix[2][2], matrix[1][2], matrix[0][2]],
+            [matrix[3][3], matrix[2][3], matrix[1][3], matrix[0][3]],
+        ];
+    }
+
+    fn isColliding22(piece_matrix: [[u8; 2]; 2], game_grid:[[i8; GRID_WIDTH as usize]; GRID_HEIGTH as usize]) -> bool {
+        false
+    }
+
     /*
          TO DO
          - a function whoch makes the super-rotations of tetris game to a piece, and push the piece if it is too far from a side
          - a function which verify if any square is collisionning another one into the grid (if other pieces have been placed)
          - a funciton which can know when the current piece is placed or not
     */
- }
+}

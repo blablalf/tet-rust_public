@@ -199,10 +199,13 @@ impl Piece {
         ];
     }
 
-    fn isColliding(game_grid:[[i8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], piece_matrix: [[u8; 4]; 4], piece_pos_x: u32, piece_pos_y: u32) -> bool {
-        for (lineIndex, line) in piece_matrix.iter().enumerate() {
-            for (caseIndex, case) in line.iter().enumerate() {
-                if *case != 0 && game_grid[piece_pos_y as usize][piece_pos_x as usize] != 0 { // if we have a solid part into our matrix
+    fn isColliding(game_grid:[[i8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], piece_matrix: [[u8; 4]; 4], piece_pos_x: i32, piece_pos_y: i32) -> bool {
+        for (line_index, line) in piece_matrix.iter().enumerate() {
+            for (case_index, case) in line.iter().enumerate() {
+                // if we have a solid part into our matrix
+                if *case != 0 && game_grid[(piece_pos_y + line_index as i32) as usize][(piece_pos_x + case_index as i32) as usize] != 0 
+                    || *case != 0 && piece_pos_x + case_index as i32 > 0
+                    || *case != 0 && (piece_pos_x + case_index as i32) < BOXES_GRID_WIDTH as i32 {
                     return true;
                 }
             }

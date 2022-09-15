@@ -1,13 +1,13 @@
 use std::any;
-use crate::constant::GRID_WIDTH;
-use crate::constant::GRID_HEIGTH;
+use crate::constant::BOXES_GRID_WIDTH;
+use crate::constant::BOXES_GRID_HEIGTH;
 
 enum PieceType {
     /*
         ##
         ##
      */
-    O_tetrimino ([[u8; 2]; 2]),
+    O_tetrimino ([[u8; 4]; 4]),
 
     /*
         #
@@ -21,31 +21,31 @@ enum PieceType {
          #
         ###
     */
-    T_tetrimino ([[u8; 3]; 3]),
+    T_tetrimino ([[u8; 4]; 4]),
 
     /*
         #
         ###
     */
-    L_tetrimino ([[u8; 3]; 3]),
+    L_tetrimino ([[u8; 4]; 4]),
 
     /*
           #
         ###
     */
-    J_tetrimino ([[u8; 3]; 3]),
+    J_tetrimino ([[u8; 4]; 4]),
 
     /*
          ##
         ##
     */
-    S_tetrimino ([[u8; 3]; 3]),
+    S_tetrimino ([[u8; 4]; 4]),
 
     /*
         ##
          ##
     */
-    Z_tetrimino ([[u8; 3]; 3]),
+    Z_tetrimino ([[u8; 4]; 4]),
 
     // like tuple structs,
     KeyPress(char),
@@ -55,45 +55,52 @@ enum PieceType {
 }
 
 const O_TETRIMINO:PieceType = PieceType::O_tetrimino([
-    [1, 1], //  XX
-    [1, 1]  //  XX
+    [0,0,0,0],  //
+    [0,1,1,0],  // XX
+    [0,1,1,0],  // XX
+    [0,0,0,0],  //
 ]);
 
 const I_TETRIMINO:PieceType = PieceType::I_tetrimino([
-    [0, 0, 0, 0],   //
-    [1, 1, 1, 1],   //  XXXX
-    [0, 0, 0, 0],   //
-    [0, 0, 0, 0]    //
+    [0,0,0,0],   //
+    [1,1,1,1],   //  XXXX
+    [0,0,0,0],   //
+    [0,0,0,0]    //
 ]);
 
 const T_TETRIMINO:PieceType = PieceType::T_tetrimino([
-    [0, 0, 0],  //
-    [0, 1, 0],  //   X
-    [1, 1, 1]   //  XXX
+    [0,0,0,0],  //
+    [1,1,1,0],  // XXX
+    [0,1,0,0],  //  X
+    [0,0,0,0],  //
 ]);
 
 const L_TETRIMINO:PieceType = PieceType::L_tetrimino([
-    [0, 0, 1],  //    X
-    [1, 1, 1],  //  XXX
-    [0, 0, 0]   //
+    [0,0,0,0],  //
+    [0,0,0,1],  //   X
+    [1,1,1,1],  // XXX
+    [0,0,0,0],  //
 ]);
 
 const J_TETRIMINO:PieceType = PieceType::J_tetrimino([
-    [1, 0, 0],  //  X
-    [1, 1, 1],  //  XXX
-    [0, 0, 0]   //
+    [0,0,0,0],  //
+    [1,0,0,0],  // X
+    [1,1,1,1],  // XXX
+    [0,0,0,0],  //
 ]);
 
 const S_TETRIMINO:PieceType = PieceType::S_tetrimino([
-    [0, 1, 1],  //   XX
-    [1, 1, 0],  //  XX
-    [0, 0, 0]   //
+    [0,0,0,0],  //
+    [0,1,1,0],  //  XX
+    [1,1,0,0],  // XX
+    [0,0,0,0],  //
 ]);
 
 const Z_TETRIMINO:PieceType = PieceType::Z_tetrimino([
-    [1, 1, 0],  // XX
-    [0, 1, 1],  //  XX
-    [0, 0, 0]   //
+    [0,0,0,0],  //
+    [1,1,0,0],  // XX
+    [0,1,1,0],  //  XX
+    [0,0,0,0],  //
 ]);
 
 pub struct Piece {
@@ -155,7 +162,7 @@ impl Piece {
             _ => return O_TETRIMINO
         };
     }
-
+    /*
     fn getRightRotation22(matrix: [[u8; 2]; 2]) -> [[u8; 2]; 2] {
         return [
             [matrix[0][1], matrix[0][0]],
@@ -170,8 +177,10 @@ impl Piece {
             [matrix[2][2], matrix[1][2], matrix[0][2]],
         ];
     }
+    */
 
-    fn getRightRotation44(matrix: [[u8; 4]; 4]) -> [[u8; 4]; 4] {
+    // Dynamic formulae : x=size-y-1; y=x
+    fn getRightRotation(matrix: [[u8; 4]; 4]) -> [[u8; 4]; 4] {
         return [
             [matrix[3][0], matrix[2][0], matrix[1][0], matrix[0][0]],
             [matrix[3][2], matrix[2][2], matrix[1][1], matrix[0][2]],
@@ -180,7 +189,24 @@ impl Piece {
         ];
     }
 
-    fn isColliding22(piece_matrix: [[u8; 2]; 2], game_grid:[[i8; GRID_WIDTH as usize]; GRID_HEIGTH as usize]) -> bool {
+    // Dynamic formulae : x=y; y=size-x-1
+    fn getLeftRotation(matrix: [[u8; 4]; 4]) -> [[u8; 4]; 4] {
+        return [
+            [matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3]],
+            [matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2]],
+            [matrix[0][1], matrix[1][1], matrix[1][2], matrix[3][1]],
+            [matrix[0][0], matrix[1][0], matrix[2][0], matrix[3][0]],
+        ];
+    }
+
+    fn isColliding(game_grid:[[i8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], piece_matrix: [[u8; 4]; 4], piece_pos_x: u32, piece_pos_y: u32) -> bool {
+        for (lineIndex, line) in piece_matrix.iter().enumerate() {
+            for (caseIndex, case) in line.iter().enumerate() {
+                if *case != 0 && game_grid[piece_pos_y as usize][piece_pos_x as usize] != 0 { // if we have a solid part into our matrix
+                    return true;
+                }
+            }
+        }
         false
     }
 

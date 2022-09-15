@@ -2,10 +2,10 @@
 
 // SIZING
 pub const SQUARE_SIZE: u32 = 40; // Side size in pixels of a square into the grid
-pub const GRID_WIDTH: u32 = 10; // Width of the grid in square unit
-pub const GRID_HEIGTH: u32 = 22; // Width of the grid in square unit
-pub const PIXEL_GRID_WIDTH: u32 = GRID_WIDTH*SQUARE_SIZE; // Width of the grid in pixel unit
-pub const PIXEL_GRID_HEIGTH: u32 = GRID_HEIGTH*SQUARE_SIZE; // Width of the grid in pixel unit
+pub const BOXES_GRID_WIDTH: u32 = 10; // Width of the grid in square unit
+pub const BOXES_GRID_HEIGTH: u32 = 22; // Width of the grid in square unit
+pub const PIXEL_GRID_WIDTH: u32 = BOXES_GRID_WIDTH*SQUARE_SIZE; // Width of the grid in pixel unit
+pub const PIXEL_GRID_HEIGTH: u32 = BOXES_GRID_HEIGTH*SQUARE_SIZE; // Width of the grid in pixel unit
 
 // COLORS -> r, v, b, opacity
 pub const BACKGROUND: [f32; 4] = [0., 0., 0., 1.]; // BLACK color

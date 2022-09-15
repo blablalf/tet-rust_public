@@ -7,8 +7,8 @@ extern crate piston;
 // Other files import
 mod pieces;
 mod constant;
-use crate::constant::GRID_WIDTH;
-use crate::constant::GRID_HEIGTH;
+use crate::constant::BOXES_GRID_WIDTH;
+use crate::constant::BOXES_GRID_HEIGTH;
 use crate::constant::SQUARE_SIZE;
 use crate::constant::BACKGROUND;
 use crate::constant::RED;
@@ -30,7 +30,7 @@ pub struct AppState{
     piece_speed: i32, // Speed of the descent of the current piece to place
     pos_x: i32, // x axis coordinate of the piece apparitions
     pos_y: i32,// y axis coordinate of the piece apparitions
-    grid: [[i8; GRID_WIDTH as usize]; GRID_HEIGTH as usize]
+    grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize]
 }
 
 impl AppState {

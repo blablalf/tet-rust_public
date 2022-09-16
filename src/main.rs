@@ -104,6 +104,8 @@ impl AppState {
                     self.piece_speed += 2;
                 }
                 Key::Left => {
+
+                    // to do -> export this code as a piece function
                     if !self.current_piece.isColliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x-SQUARE_SIZE as i32, self.current_piece.pos_y) {
                         self.current_piece.pos_x -= SQUARE_SIZE as i32;
                     }
@@ -114,6 +116,8 @@ impl AppState {
                      */
                 }
                 Key::Right => {
+
+                    // to do -> export this code as a piece function
                     if !self.current_piece.isColliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x+SQUARE_SIZE as i32, self.current_piece.pos_y) {
                         self.current_piece.pos_x += SQUARE_SIZE as i32;
                     }

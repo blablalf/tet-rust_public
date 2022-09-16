@@ -62,7 +62,7 @@ impl Piece {
     */
     
     pub fn tryRightRotation(&mut self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize]) -> bool {
-        if !self.isColliding(game_grid, self.performRightRotation(self.matrix), self.pos_x, self.pos_y) {
+        if !self.placed && !self.isColliding(game_grid, self.performRightRotation(self.matrix), self.pos_x, self.pos_y) {
             // If succeeds
             self.matrix = self.performRightRotation(self.matrix);
             return true;
@@ -90,7 +90,7 @@ impl Piece {
             for (case_index, case) in line.iter().enumerate() {
                 // if we have a solid part into our matrix
                 let temp_pos_y: i32 = if pos_y < 0 {0} else {pos_y};
-                if (*case != 0 && (pos_y + (SQUARE_SIZE*line_index as u32) as i32 == (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32))
+                if (*case != 0 && (pos_y + (SQUARE_SIZE*line_index as u32) as i32 >= (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32))
                     || *case != 0 && game_grid[line_index + (temp_pos_y/SQUARE_SIZE as i32) as usize][(case_index as i32 + self.pos_x/SQUARE_SIZE as i32) as usize] != 0 {
                     return true;
                 }
@@ -102,6 +102,9 @@ impl Piece {
     pub fn autoSetPlaced(&mut self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], pos_y: i32) -> bool {
         if self.isPlaced(game_grid, pos_y) {
             self.placed = true;
+            if self.pos_y%SQUARE_SIZE as i32 != 0 {
+                self.pos_y += SQUARE_SIZE as i32 - self.pos_y%SQUARE_SIZE as i32;
+            }
             return true;
         }
         return false;

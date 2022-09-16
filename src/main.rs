@@ -104,11 +104,8 @@ impl AppState {
                     self.piece_speed += 2;
                 }
                 Key::Left => {
-                    println!("Before left verif posX-sqsize={}", self.current_piece.pos_x-SQUARE_SIZE as i32);
                     if !self.current_piece.isColliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x-SQUARE_SIZE as i32, self.current_piece.pos_y) {
-                        println!("Before turning left posX={}", self.current_piece.pos_x);
                         self.current_piece.pos_x -= SQUARE_SIZE as i32;
-                        println!("After turning left posX={}", self.current_piece.pos_x);
                     }
                     /*
                     if self.current_piece.pos_x > 0 { // We don't want that the piece run away from the left of our window

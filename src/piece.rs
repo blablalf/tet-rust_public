@@ -91,7 +91,7 @@ impl Piece {
                 // if we have a solid part into our matrix
                 let temp_pos_y: i32 = if pos_y < 0 {0} else {pos_y};
                 if (*case != 0 && (pos_y + (SQUARE_SIZE*line_index as u32) as i32 == (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32))
-                    || *case != 0 && game_grid[line_index + (temp_pos_y/SQUARE_SIZE as i32) as usize][case_index + (self.pos_x/SQUARE_SIZE as i32) as usize] != 0 { // faulty
+                    || *case != 0 && game_grid[line_index + (temp_pos_y/SQUARE_SIZE as i32) as usize][(case_index as i32 + self.pos_x/SQUARE_SIZE as i32) as usize] != 0 {
                     return true;
                 }
             }

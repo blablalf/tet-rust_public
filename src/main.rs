@@ -96,11 +96,10 @@ impl AppState {
     fn press(&mut self, args: &Button) {
         if let &Button::Keyboard(key) = args {
             match key {
-                /*
                 Key::Up => {
                     // rotation
+                    self.current_piece.tryRightRotation(self.grid);
                 }
-                */
                 Key::Down => {
                     self.piece_speed += 2;
                 }

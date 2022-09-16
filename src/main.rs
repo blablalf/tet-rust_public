@@ -89,7 +89,31 @@ impl AppState {
         // We don't want that the piece throw down of our window
         if !self.current_piece.autoSetPlaced(self.grid, self.current_piece.pos_y + self.piece_speed) {
             self.current_piece.pos_y += self.piece_speed;
+        } else {
+            // Write the piece into the grid
+            self.place_piece_on_grid();
+            self.generate_new_piece();
         }
+    }
+
+    // When a piece is placed, put it into the project matrix
+    fn place_piece_on_grid(&mut self) {
+        for (line_index, line) in self.current_piece.clone().matrix.iter().enumerate() {
+            for (case_index, case) in line.iter().enumerate() {
+                if *case != 0 {
+                    self.grid[line_index+(self.current_piece.pos_y/SQUARE_SIZE as i32) as usize][case_index+(self.current_piece.pos_x/SQUARE_SIZE as i32) as usize] = *case;
+                }
+            }
+        }
+    }
+
+    fn generate_new_piece(&mut self) {
+        self.current_piece = Piece{
+            color: RED, 
+            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
+            pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
+            placed: false,
+            matrix: T_TETRIMINO};
     }
 
     // When the user press a key
@@ -132,7 +156,6 @@ impl AppState {
         }
     }
 
-    
     // When the user release the keys
     fn release(&mut self, args: &Button) {
         if let &Button::Keyboard(key) = args {

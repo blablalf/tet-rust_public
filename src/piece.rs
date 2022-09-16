@@ -4,6 +4,7 @@ use crate::constant::PIXEL_GRID_HEIGTH;
 use crate::constant::PIXEL_GRID_WIDTH;
 use crate::constant::SQUARE_SIZE;
 
+#[derive(Copy, Clone)]
 pub struct Piece {
     pub color: [f32; 4],
     pub pos_x: i32,

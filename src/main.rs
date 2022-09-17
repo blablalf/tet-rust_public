@@ -40,6 +40,7 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, Key, PressEvent, ReleaseEvent, RenderArgs, RenderEvent, UpdateArgs};
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
+use std::process;
 
 pub struct AppState{
     gl: GlGraphics,
@@ -89,10 +90,12 @@ impl AppState {
         // We don't want that the piece throw down of our window
         if !self.current_piece.auto_set_placed(self.grid, self.current_piece.pos_y + self.piece_speed) {
             self.current_piece.pos_y += self.piece_speed;
-        } else {
-            // Write the piece into the grid
+        } else if self.current_piece.pos_y > 0 {
             self.place_piece_on_grid();
             self.generate_new_piece();
+        } else {
+            println!("GAME OVER !\nYour score is : {}", self.score);
+            process::exit(0x0100);
         }
     }
 

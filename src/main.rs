@@ -101,6 +101,23 @@ impl AppState {
         }
     }
 
+    fn handle_complete_line(&self) {
+        let mut complete_line_count = 0;
+        let mut are_lines_complete: [bool; BOXES_GRID_HEIGTH as usize] = [false; BOXES_GRID_HEIGTH as usize];
+        for (line_index, line) in self.grid.iter().enumerate() {
+            are_lines_complete[line_index] = true;
+            for (case) in line {
+                if *case == 0 {
+                    are_lines_complete[line_index] = false;
+                }
+            }
+            if are_lines_complete[line_index] {
+                complete_line_count += 1;
+            }
+        }
+        // Now delete these complete lines and increase the score
+    }
+
     fn generate_new_piece(&mut self) {
         self.current_piece = Piece::new();
     }

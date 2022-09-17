@@ -87,7 +87,7 @@ impl AppState {
     // Updating data
     fn update(&mut self, _args: &UpdateArgs) {
         // We don't want that the piece throw down of our window
-        if !self.current_piece.autoSetPlaced(self.grid, self.current_piece.pos_y + self.piece_speed) {
+        if !self.current_piece.auto_set_placed(self.grid, self.current_piece.pos_y + self.piece_speed) {
             self.current_piece.pos_y += self.piece_speed;
         } else {
             // Write the piece into the grid
@@ -98,10 +98,10 @@ impl AppState {
 
     // When a piece is placed, put it into the project matrix
     fn place_piece_on_grid(&mut self) {
-        for (line_index, line) in self.current_piece.clone().matrix.iter().enumerate() {
+        for (line_index, line) in self.current_piece.getMatrix().iter().enumerate() {
             for (case_index, case) in line.iter().enumerate() {
                 if *case != 0 {
-                    self.grid[line_index+(self.current_piece.pos_y/SQUARE_SIZE as i32) as usize][case_index+(self.current_piece.pos_x/SQUARE_SIZE as i32) as usize] = *case;
+                    self.grid[line_index+(self.current_piece.pos_y/SQUARE_SIZE as i32) as usize][(case_index as i32 + (self.current_piece.pos_x/SQUARE_SIZE as i32)) as usize] = *case;
                 }
             }
         }
@@ -125,12 +125,12 @@ impl AppState {
                     self.current_piece.tryRightRotation(self.grid);
                 }
                 Key::Down => {
-                    self.piece_speed += 2;
+                    self.piece_speed *= 3;
                 }
                 Key::Left => {
 
                     // to do -> export this code as a piece function
-                    if !self.current_piece.isColliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x-SQUARE_SIZE as i32, self.current_piece.pos_y) {
+                    if !self.current_piece.is_colliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x-SQUARE_SIZE as i32, self.current_piece.pos_y) {
                         self.current_piece.pos_x -= SQUARE_SIZE as i32;
                     }
                     /*
@@ -142,7 +142,7 @@ impl AppState {
                 Key::Right => {
 
                     // to do -> export this code as a piece function
-                    if !self.current_piece.isColliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x+SQUARE_SIZE as i32, self.current_piece.pos_y) {
+                    if !self.current_piece.is_colliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x+SQUARE_SIZE as i32, self.current_piece.pos_y) {
                         self.current_piece.pos_x += SQUARE_SIZE as i32;
                     }
                     /*

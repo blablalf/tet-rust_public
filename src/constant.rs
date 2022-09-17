@@ -42,14 +42,14 @@ pub const T_TETRIMINO: [[u8; 4]; 4] = [
 pub const L_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [0,0,0,1],  //   X
-    [1,1,1,1],  // XXX
+    [0,1,1,1],  // XXX
     [0,0,0,0],  //
 ];
 
 pub const J_TETRIMINO: [[u8; 4]; 4] = [
     [0,0,0,0],  //
     [1,0,0,0],  // X
-    [1,1,1,1],  // XXX
+    [1,1,1,0],  // XXX
     [0,0,0,0],  //
 ];
 
@@ -66,3 +66,43 @@ pub const Z_TETRIMINO: [[u8; 4]; 4] = [
     [0,1,1,0],  //  XX
     [0,0,0,0],  //
 ];
+
+pub fn get_color_number(color: [f32; 4]) -> u8 {
+    if color == RED {
+        return 1
+    } else if color == YELLOW {
+        return 2
+    } else if color == LIGHT_BLUE {
+        return 3
+    } else if color == BLUE {
+        return 4
+    } else if color == ORANGE {
+        return 5
+    } else if color == GREEN {
+        return 6
+    } else if color == PURPLE {
+        return 7
+    } else {
+        return 0
+    }
+}
+
+pub fn get_number_color(color_number: u8) -> [f32; 4] {
+    if color_number == 1 {
+        return RED
+    } else if color_number == 2 {
+        return YELLOW
+    } else if color_number == 3 {
+        return LIGHT_BLUE
+    } else if color_number == 4 {
+        return BLUE
+    } else if color_number == 5 {
+        return ORANGE
+    } else if color_number == 6 {
+        return GREEN
+    } else if color_number == 7 {
+        return PURPLE
+    } else {
+        return RED
+    }
+}

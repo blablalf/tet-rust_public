@@ -6,8 +6,6 @@ extern crate piston;
 
 // Other files import
 mod piece;
-use std::usize;
-
 use crate::piece::Piece;
 
 mod constant;
@@ -20,17 +18,9 @@ use crate::constant::BACKGROUND;
 use crate::constant::PIXEL_GRID_HEIGTH;
 use crate::constant::PIXEL_GRID_WIDTH;
 
-// Colors
-use crate::constant::RED;
-
-// Pieces
-use crate::constant::T_TETRIMINO;
-use crate::constant::O_TETRIMINO;
-use crate::constant::I_TETRIMINO;
-use crate::constant::L_TETRIMINO;
-use crate::constant::J_TETRIMINO;
-use crate::constant::S_TETRIMINO;
-use crate::constant::Z_TETRIMINO;
+// Colors conversion
+use crate::constant::get_color_number;
+use crate::constant::get_number_color;
 
 use piston::UpdateEvent;
 // lets put some shortcuts that could be usefuls
@@ -41,6 +31,7 @@ use piston::input::{Button, Key, PressEvent, ReleaseEvent, RenderArgs, RenderEve
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
 use std::process;
+use std::usize;
 
 pub struct AppState{
     gl: GlGraphics,
@@ -67,8 +58,8 @@ impl AppState {
             // Writing the pieces already placed
             for (line_index, line) in self.grid.iter().enumerate() { // for every line
                 for (case_index, case) in line.iter().enumerate() {
-                    if case != &0 {
-                        rectangle(RED, square, c.transform.trans((case_index*SQUARE_SIZE as usize) as f64, (line_index*SQUARE_SIZE as usize) as f64), gl); // TO-DO -> put the correct color instead of RED
+                    if *case != 0 {
+                        rectangle(get_number_color(*case), square, c.transform.trans((case_index*SQUARE_SIZE as usize) as f64, (line_index*SQUARE_SIZE as usize) as f64), gl); // TO-DO -> put the correct color instead of RED
                     }
                 }
             }
@@ -77,7 +68,7 @@ impl AppState {
             for (line_index, line) in self.current_piece.matrix.iter().enumerate() {
                 for (case_index, case) in line.iter().enumerate() {
                     if *case != 0 {
-                        rectangle(RED, square, c.transform.trans(pos_x + (case_index as u32*SQUARE_SIZE) as f64, pos_y + (line_index as u32*SQUARE_SIZE) as f64), gl); // transform to enlarge our piece shape
+                        rectangle(self.current_piece.color, square, c.transform.trans(pos_x + (case_index as u32*SQUARE_SIZE) as f64, pos_y + (line_index as u32*SQUARE_SIZE) as f64), gl); // transform to enlarge our piece shape
                     }
                 }
             }
@@ -95,28 +86,23 @@ impl AppState {
             self.generate_new_piece();
         } else {
             println!("GAME OVER !\nYour score is : {}", self.score);
-            process::exit(0x0100);
+            process::exit(1);
         }
     }
 
     // When a piece is placed, put it into the project matrix
     fn place_piece_on_grid(&mut self) {
-        for (line_index, line) in self.current_piece.getMatrix().iter().enumerate() {
+        for (line_index, line) in self.current_piece.get_matrix().iter().enumerate() {
             for (case_index, case) in line.iter().enumerate() {
                 if *case != 0 {
-                    self.grid[line_index+(self.current_piece.pos_y/SQUARE_SIZE as i32) as usize][(case_index as i32 + (self.current_piece.pos_x/SQUARE_SIZE as i32)) as usize] = *case;
+                    self.grid[line_index+(self.current_piece.pos_y/SQUARE_SIZE as i32) as usize][(case_index as i32 + (self.current_piece.pos_x/SQUARE_SIZE as i32)) as usize] = get_color_number(self.current_piece.color);
                 }
             }
         }
     }
 
     fn generate_new_piece(&mut self) {
-        self.current_piece = Piece{
-            color: RED, 
-            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
-            pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
-            placed: false,
-            matrix: T_TETRIMINO};
+        self.current_piece = Piece::new();
     }
 
     // When the user press a key
@@ -125,7 +111,7 @@ impl AppState {
             match key {
                 Key::Up => {
                     // rotation
-                    self.current_piece.tryRightRotation(self.grid);
+                    self.current_piece.try_right_rotation(self.grid);
                 }
                 Key::Down => {
                     self.piece_speed *= 3;
@@ -199,12 +185,7 @@ fn main() {
         score: 0,
         piece_speed: 1,
         grid: [[0; 10]; 22], // Define our grid to full blank case
-        current_piece: Piece{
-            color: RED, 
-            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
-            pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
-            placed: false,
-            matrix: T_TETRIMINO}
+        current_piece: Piece::new()
     };
 
     // Let's init an event listener to react to the user and re-render in function of that

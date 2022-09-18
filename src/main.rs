@@ -22,7 +22,6 @@ use crate::constant::PIXEL_GRID_WIDTH;
 use crate::constant::get_color_number;
 use crate::constant::get_number_color;
 
-use piston::UpdateEvent;
 // lets put some shortcuts that could be usefuls
 //use std::process; // Will be used later
 use piston::window::WindowSettings;
@@ -30,8 +29,10 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, Key, PressEvent, ReleaseEvent, RenderArgs, RenderEvent, UpdateArgs};
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
+use piston::UpdateEvent;
 use std::process;
 use std::usize;
+use num::pow;
 
 pub struct AppState{
     gl: GlGraphics,
@@ -83,6 +84,7 @@ impl AppState {
             self.current_piece.pos_y += self.piece_speed;
         } else if self.current_piece.pos_y > 0 {
             self.place_piece_on_grid();
+            self.handle_complete_line();
             self.generate_new_piece();
         } else {
             println!("GAME OVER !\nYour score is : {}", self.score);
@@ -101,21 +103,34 @@ impl AppState {
         }
     }
 
-    fn handle_complete_line(&self) {
-        let mut complete_line_count = 0;
-        let mut are_lines_complete: [bool; BOXES_GRID_HEIGTH as usize] = [false; BOXES_GRID_HEIGTH as usize];
-        for (line_index, line) in self.grid.iter().enumerate() {
-            are_lines_complete[line_index] = true;
-            for (case) in line {
-                if *case == 0 {
-                    are_lines_complete[line_index] = false;
-                }
-            }
-            if are_lines_complete[line_index] {
-                complete_line_count += 1;
+    fn is_complete_line(&self, index: u32) -> bool {
+        let mut is_full = true;
+        for case in self.grid[index as usize] {
+            if case == 0 {
+                is_full = false;
             }
         }
-        // Now delete these complete lines and increase the score
+        return is_full;
+    }
+
+    fn handle_complete_line(&mut self) {
+        let mut complete_line_count = 0;
+        for (line_index, _line) in self.grid.clone().iter().enumerate() {
+            let mut same_line_complete_counter = 0;
+            while self.is_complete_line(line_index as u32) {
+                println!("same_line_complete_counter={}", same_line_complete_counter);
+                same_line_complete_counter += 1;
+                for line_index_temp in 0..line_index {
+                    println!("line_index_temp={} && line_index={}", line_index_temp, line_index);
+                    self.grid[line_index - line_index_temp] = self.grid[line_index - line_index_temp - 1];
+                }
+                complete_line_count += 1;
+                for line_index_temp in 0..=same_line_complete_counter {
+                    self.grid[line_index_temp] = [0; BOXES_GRID_WIDTH as usize];
+                }
+            }
+            self.score += pow(complete_line_count * 100, complete_line_count as usize);
+        }
     }
 
     fn generate_new_piece(&mut self) {

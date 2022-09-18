@@ -50,7 +50,7 @@ impl AppState {
         let pos_y = self.current_piece.pos_y as f64;
 
         // We wont draw it currently -> (TO DO)
-        let square = rectangle::square(0.0, 0.0, SQUARE_SIZE as f64); // x -> x starting position | y -> y starting position
+        let square = rectangle::square(0.0, 0.0, (SQUARE_SIZE-2) as f64); // x -> x starting position | y -> y starting position
 
         // function included inside our opengl lib, when we will draw our window and everything, let's draw 
         self.gl.draw(args.viewport(), |c, gl| {
@@ -60,7 +60,7 @@ impl AppState {
             for (line_index, line) in self.grid.iter().enumerate() { // for every line
                 for (case_index, case) in line.iter().enumerate() {
                     if *case != 0 {
-                        rectangle(get_number_color(*case), square, c.transform.trans((case_index*SQUARE_SIZE as usize) as f64, (line_index*SQUARE_SIZE as usize) as f64), gl); // TO-DO -> put the correct color instead of RED
+                        rectangle(get_number_color(*case), square, c.transform.trans(((case_index*SQUARE_SIZE as usize) + 1) as f64, ((line_index*SQUARE_SIZE as usize) + 1) as f64), gl); // TO-DO -> put the correct color instead of RED
                     }
                 }
             }
@@ -118,10 +118,8 @@ impl AppState {
         for (line_index, _line) in self.grid.clone().iter().enumerate() {
             let mut same_line_complete_counter = 0;
             while self.is_complete_line(line_index as u32) {
-                println!("same_line_complete_counter={}", same_line_complete_counter);
                 same_line_complete_counter += 1;
                 for line_index_temp in 0..line_index {
-                    println!("line_index_temp={} && line_index={}", line_index_temp, line_index);
                     self.grid[line_index - line_index_temp] = self.grid[line_index - line_index_temp - 1];
                 }
                 complete_line_count += 1;

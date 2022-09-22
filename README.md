@@ -35,3 +35,9 @@ Our game must be as close as possible to the official spec (see `doc/`).
 
 ## Questions
 * When am I able to just put a return value whitout the return keyword
+
+## Bugs
+* If you complete too many lines at once, there is an overflow bug
+* You can't rotate the tetrimino one it is placed or if it is collisionning
+* The game over appears to soon
+* If you rotate the tetrimino at the last moment, it could possibly be badly placed

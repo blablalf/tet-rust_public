@@ -212,11 +212,4 @@ impl Piece {
             matrix: tetrimino};
     }
 
-    /*
-         TO DO
-         - implement a function to tell if the piece is too far at right or left
-         - a function whoch makes the super-rotations of tetris game to a piece, and push the piece if it is too far from a side
-         - a function which verify if any square is collisionning another one into the grid (if other pieces have been placed)
-         - a funciton which can know when the current piece is placed or not
-    */
 }

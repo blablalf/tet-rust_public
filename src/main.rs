@@ -116,16 +116,12 @@ impl AppState {
     fn handle_complete_line(&mut self) {
         let mut complete_line_count = 0;
         for (line_index, _line) in self.grid.clone().iter().enumerate() {
-            let mut same_line_complete_counter = 0;
             while self.is_complete_line(line_index as u32) {
-                same_line_complete_counter += 1;
                 for line_index_temp in 0..line_index {
                     self.grid[line_index - line_index_temp] = self.grid[line_index - line_index_temp - 1];
                 }
+                self.grid[0] = [0; BOXES_GRID_WIDTH as usize];
                 complete_line_count += 1;
-                for line_index_temp in 0..=same_line_complete_counter {
-                    self.grid[line_index_temp] = [0; BOXES_GRID_WIDTH as usize];
-                }
             }
             self.score += pow(complete_line_count * 100, complete_line_count as usize);
         }

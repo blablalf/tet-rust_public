@@ -32,7 +32,6 @@ use opengl_graphics::{GlGraphics, OpenGL};
 use piston::UpdateEvent;
 use std::process;
 use std::usize;
-use num::pow;
 
 pub struct AppState{
     gl: GlGraphics,
@@ -123,7 +122,7 @@ impl AppState {
                 self.grid[0] = [0; BOXES_GRID_WIDTH as usize];
                 complete_line_count += 1;
             }
-            self.score += pow(complete_line_count * 100, complete_line_count as usize);
+            self.score += complete_line_count * 100 * complete_line_count;
         }
     }
 
@@ -210,11 +209,12 @@ fn main() {
         gl: GlGraphics::new(opengl),
         score: 0,
         piece_speed: 1,
-        grid: [[0; 10]; 22], // Define our grid to full blank case
+        grid: [[0; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], // Define our grid to full blank case
         current_piece: Piece::new()
     };
 
     // Let's init an event listener to react to the user and re-render in function of that
+    // The defaults settings are made to move the piece with the maximum refresh frame rate
     let mut events = Events::new(EventSettings::new());
     
     

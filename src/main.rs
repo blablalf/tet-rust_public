@@ -22,6 +22,7 @@ use crate::constant::PIXEL_GRID_WIDTH;
 use crate::constant::get_color_number;
 use crate::constant::get_number_color;
 
+use piston::EventLoop;
 // lets put some shortcuts that could be usefuls
 //use std::process; // Will be used later
 use piston::window::WindowSettings;
@@ -216,7 +217,7 @@ fn main() {
     // Let's init an event listener to react to the user and re-render in function of that
     // The defaults settings are made to move the piece with the maximum refresh frame rate
     let mut events = Events::new(EventSettings::new());
-    
+    events.set_max_fps(60);
     
     while let Some(e) = events.next(&mut window) {
 

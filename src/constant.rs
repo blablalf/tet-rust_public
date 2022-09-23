@@ -4,8 +4,8 @@
 pub const SQUARE_SIZE: u32 = 40; // Side size in pixels of a square into the grid
 pub const BOXES_GRID_WIDTH: u32 = 10; // Width of the grid in square unit
 pub const BOXES_GRID_HEIGTH: u32 = 22; // Width of the grid in square unit
-pub const PIXEL_GRID_WIDTH: u32 = BOXES_GRID_WIDTH*SQUARE_SIZE; // Width of the grid in pixel unit
-pub const PIXEL_GRID_HEIGTH: u32 = BOXES_GRID_HEIGTH*SQUARE_SIZE; // Width of the grid in pixel unit
+pub const PIXEL_GRID_WIDTH: u32 = BOXES_GRID_WIDTH * SQUARE_SIZE; // Width of the grid in pixel unit
+pub const PIXEL_GRID_HEIGTH: u32 = BOXES_GRID_HEIGTH * SQUARE_SIZE; // Width of the grid in pixel unit
 
 // COLORS -> r, v, b, opacity
 pub const BACKGROUND: [f32; 4] = [0., 0., 0., 1.]; // BLACK color
@@ -19,90 +19,90 @@ pub const PURPLE: [f32; 4] = [0.51, 0., 0.86, 1.]; // PURPLE color
 
 // PIECES NORTH MATRIX
 pub const O_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],  //
-    [0,1,1,0],  // XX
-    [0,1,1,0],  // XX
-    [0,0,0,0],  //
+    [0, 0, 0, 0], //
+    [0, 1, 1, 0], // XX
+    [0, 1, 1, 0], // XX
+    [0, 0, 0, 0], //
 ];
 
 pub const I_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],   //
-    [1,1,1,1],   //  XXXX
-    [0,0,0,0],   //
-    [0,0,0,0]    //
+    [0, 0, 0, 0], //
+    [1, 1, 1, 1], //  XXXX
+    [0, 0, 0, 0], //
+    [0, 0, 0, 0], //
 ];
 
 pub const T_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],  //
-    [1,1,1,0],  // XXX
-    [0,1,0,0],  //  X
-    [0,0,0,0],  //
+    [0, 0, 0, 0], //
+    [1, 1, 1, 0], // XXX
+    [0, 1, 0, 0], //  X
+    [0, 0, 0, 0], //
 ];
 
 pub const L_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],  //
-    [0,0,0,1],  //   X
-    [0,1,1,1],  // XXX
-    [0,0,0,0],  //
+    [0, 0, 0, 0], //
+    [0, 0, 0, 1], //   X
+    [0, 1, 1, 1], // XXX
+    [0, 0, 0, 0], //
 ];
 
 pub const J_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],  //
-    [1,0,0,0],  // X
-    [1,1,1,0],  // XXX
-    [0,0,0,0],  //
+    [0, 0, 0, 0], //
+    [1, 0, 0, 0], // X
+    [1, 1, 1, 0], // XXX
+    [0, 0, 0, 0], //
 ];
 
 pub const S_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],  //
-    [0,1,1,0],  //  XX
-    [1,1,0,0],  // XX
-    [0,0,0,0],  //
+    [0, 0, 0, 0], //
+    [0, 1, 1, 0], //  XX
+    [1, 1, 0, 0], // XX
+    [0, 0, 0, 0], //
 ];
 
 pub const Z_TETRIMINO: [[u8; 4]; 4] = [
-    [0,0,0,0],  //
-    [1,1,0,0],  // XX
-    [0,1,1,0],  //  XX
-    [0,0,0,0],  //
+    [0, 0, 0, 0], //
+    [1, 1, 0, 0], // XX
+    [0, 1, 1, 0], //  XX
+    [0, 0, 0, 0], //
 ];
 
 pub fn get_color_number(color: [f32; 4]) -> u8 {
     if color == RED {
-        return 1
+        return 1;
     } else if color == YELLOW {
-        return 2
+        return 2;
     } else if color == LIGHT_BLUE {
-        return 3
+        return 3;
     } else if color == BLUE {
-        return 4
+        return 4;
     } else if color == ORANGE {
-        return 5
+        return 5;
     } else if color == GREEN {
-        return 6
+        return 6;
     } else if color == PURPLE {
-        return 7
+        return 7;
     } else {
-        return 0
+        return 0;
     }
 }
 
 pub fn get_number_color(color_number: u8) -> [f32; 4] {
     if color_number == 1 {
-        return RED
+        return RED;
     } else if color_number == 2 {
-        return YELLOW
+        return YELLOW;
     } else if color_number == 3 {
-        return LIGHT_BLUE
+        return LIGHT_BLUE;
     } else if color_number == 4 {
-        return BLUE
+        return BLUE;
     } else if color_number == 5 {
-        return ORANGE
+        return ORANGE;
     } else if color_number == 6 {
-        return GREEN
+        return GREEN;
     } else if color_number == 7 {
-        return PURPLE
+        return PURPLE;
     } else {
-        return RED
+        return RED;
     }
 }

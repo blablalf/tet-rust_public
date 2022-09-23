@@ -104,7 +104,7 @@ impl AppState {
         } else if self.current_piece.pos_y >= 0 {
             self.place_piece_on_grid();
             self.handle_complete_line();
-            self.generate_new_piece();
+            self.current_piece = Piece::new();
         } else if self.current_piece.is_colliding(
             self.grid,
             self.current_piece.matrix,
@@ -153,10 +153,6 @@ impl AppState {
             }
             self.score += complete_line_count * 100 * complete_line_count;
         }
-    }
-
-    fn generate_new_piece(&mut self) {
-        self.current_piece = Piece::new();
     }
 
     // When the user press a key

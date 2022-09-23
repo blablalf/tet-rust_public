@@ -22,7 +22,6 @@ use crate::constant::PIXEL_GRID_WIDTH;
 use crate::constant::get_color_number;
 use crate::constant::get_number_color;
 
-use piston::EventLoop;
 // lets put some shortcuts that could be usefuls
 //use std::process; // Will be used later
 use piston::window::WindowSettings;
@@ -80,13 +79,13 @@ impl AppState {
     // Updating data
     fn update(&mut self, _args: &UpdateArgs) {
         // We don't want that the piece throw down of our window
-        if !self.current_piece.auto_set_placed(self.grid, self.current_piece.pos_y + self.piece_speed) {
+        if !self.current_piece.auto_set_placed(self.grid, self.current_piece.pos_y, self.piece_speed) {
             self.current_piece.pos_y += self.piece_speed;
-        } else if self.current_piece.pos_y > 0 {
+        } else if self.current_piece.pos_y >= 0 {
             self.place_piece_on_grid();
             self.handle_complete_line();
             self.generate_new_piece();
-        } else {
+        } else if self.current_piece.is_colliding(self.grid, self.current_piece.matrix, self.current_piece.pos_x, self.current_piece.pos_y + 1) {
             println!("GAME OVER !\nYour score is : {}", self.score);
             process::exit(1);
         }
@@ -217,7 +216,7 @@ fn main() {
     // Let's init an event listener to react to the user and re-render in function of that
     // The defaults settings are made to move the piece with the maximum refresh frame rate
     let mut events = Events::new(EventSettings::new());
-    events.set_max_fps(60);
+    
     
     while let Some(e) = events.next(&mut window) {
 

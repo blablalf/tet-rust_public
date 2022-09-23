@@ -95,15 +95,38 @@ impl Piece {
     
 
     pub fn is_colliding(&self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], piece_matrix: [[u8; 4]; 4], pos_x: i32, pos_y: i32) -> bool {
-        if pos_y >= 0 {
-            for (line_index, line) in piece_matrix.iter().enumerate() {
-                for (case_index, case) in line.iter().enumerate() {
-                    // if we have a solid part into our matrix
-                    if *case != 0 && (pos_x + (case_index*SQUARE_SIZE as usize) as i32) < 0 // Through the left
-                        || *case != 0 && (pos_x + (case_index*SQUARE_SIZE as usize) as i32) >= PIXEL_GRID_WIDTH as i32
-                        || *case != 0 && game_grid[(pos_y/SQUARE_SIZE as i32 + line_index as i32) as usize][(pos_x/SQUARE_SIZE as i32 + case_index as i32) as usize] != 0 {
-                        return true;
-                    }
+        // Be sure to not going out of the array index
+        /*
+        let temp_pos_y;
+        if pos_y <= 0 {
+            temp_pos_y = 0;
+        } else {
+            temp_pos_y = pos_y
+        }
+         */
+        // Detecting collisions
+        for (line_index, line) in piece_matrix.iter().enumerate() {
+            for (case_index, case) in line.iter().enumerate() {
+                // if we have a solid part into our matrix
+                /*
+                let temp_y = 0;
+                if *case != 0 && (pos_y/SQUARE_SIZE as i32 + line_index as i32) < 0 {
+                    temp_y = -(line_index as i32 * (SQUARE_SIZE as i32));
+                }
+                */
+
+
+                
+                if  *case != 0 && (// It needs to be a not empty case
+                    ((pos_x + (case_index*SQUARE_SIZE as usize) as i32) < 0) // Through the left
+                    || ((pos_x + (case_index*SQUARE_SIZE as usize) as i32) >= PIXEL_GRID_WIDTH as i32) // Through the right
+                    || ((pos_y/SQUARE_SIZE as i32 + line_index as i32) > 0 // the y index to not be negative otherwise there will be an overflow
+                        && game_grid // case in the grid corresponding needs to not be empty
+                            [(pos_y/SQUARE_SIZE as i32 + line_index as i32) as usize] // Y
+                            [(pos_x/SQUARE_SIZE as i32 + case_index as i32) as usize] != 0) // X
+                        ) {
+                    println!("pos_y={}, line_index={}", pos_y, line_index);
+                    return true;
                 }
             }
         }
@@ -124,12 +147,10 @@ impl Piece {
         return false; 
     }
 
-    pub fn auto_set_placed(&mut self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], pos_y: i32) -> bool {
-        if self.is_placed(game_grid, pos_y) {
+    pub fn auto_set_placed(&mut self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], pos_y: i32, speed: i32) -> bool {
+        if self.is_placed(game_grid, pos_y + speed) {
             self.placed = true;
-            if self.pos_y%SQUARE_SIZE as i32 != 0 {
-                self.pos_y += SQUARE_SIZE as i32 - self.pos_y%SQUARE_SIZE as i32;
-            }
+            self.pos_y += speed;
             return true;
         }
         return false;

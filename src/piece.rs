@@ -1,26 +1,26 @@
-// Constant value 
-use crate::constant::BOXES_GRID_WIDTH;
+// Constant value
 use crate::constant::BOXES_GRID_HEIGTH;
+use crate::constant::BOXES_GRID_WIDTH;
 use crate::constant::PIXEL_GRID_HEIGTH;
 use crate::constant::PIXEL_GRID_WIDTH;
 use crate::constant::SQUARE_SIZE;
 
 // Colors
+use crate::constant::BLUE;
+use crate::constant::GREEN;
+use crate::constant::LIGHT_BLUE;
+use crate::constant::ORANGE;
+use crate::constant::PURPLE;
 use crate::constant::RED;
 use crate::constant::YELLOW;
-use crate::constant::LIGHT_BLUE;
-use crate::constant::BLUE;
-use crate::constant::ORANGE;
-use crate::constant::GREEN;
-use crate::constant::PURPLE;
 
 // Pieces
-use crate::constant::T_TETRIMINO;
-use crate::constant::O_TETRIMINO;
 use crate::constant::I_TETRIMINO;
-use crate::constant::L_TETRIMINO;
 use crate::constant::J_TETRIMINO;
+use crate::constant::L_TETRIMINO;
+use crate::constant::O_TETRIMINO;
 use crate::constant::S_TETRIMINO;
+use crate::constant::T_TETRIMINO;
 use crate::constant::Z_TETRIMINO;
 
 // Lib
@@ -32,36 +32,10 @@ pub struct Piece {
     pub pos_x: i32,
     pub pos_y: i32,
     pub placed: bool,
-    pub matrix: [[u8; 4]; 4]
+    pub matrix: [[u8; 4]; 4],
 }
 
 impl Piece {
-
-    pub fn is_square_colliding_left_side(&self) -> bool {
-        self.pos_x < 0
-    }
-
-    pub fn is_square_colliding_right_side(&self) -> bool {
-        self.pos_x as i32 >= PIXEL_GRID_WIDTH as i32
-    }
-
-    /*
-    fn getRightRotation22(&self, matrix: [[u8; 2]; 2]) -> [[u8; 2]; 2] {
-        return [
-            [matrix[0][1], matrix[0][0]],
-            [matrix[1][1], matrix[0][1]]
-        ];
-    }
-
-    fn getRightRotation33(&self, matrix: [[u8; 3]; 3]) -> [[u8; 3]; 3] {
-        return [
-            [matrix[2][0], matrix[1][0], matrix[0][0]],
-            [matrix[2][1], matrix[1][1], matrix[0][1]],
-            [matrix[2][2], matrix[1][2], matrix[0][2]],
-        ];
-    }
-    */
-
     // Dynamic formulae : x=size-y-1; y=x
     fn perform_right_rotation(&self, matrix: [[u8; 4]; 4]) -> [[u8; 4]; 4] {
         return [
@@ -83,49 +57,48 @@ impl Piece {
         ];
     }
     */
-    
-    pub fn try_right_rotation(&mut self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize]) -> bool {
-        if !self.placed && !self.is_colliding(game_grid, self.perform_right_rotation(self.matrix), self.pos_x, self.pos_y) {
+
+    pub fn try_right_rotation(
+        &mut self,
+        game_grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize],
+    ) -> bool {
+        if !self.placed
+            && !self.is_colliding(
+                game_grid,
+                self.perform_right_rotation(self.matrix),
+                self.pos_x,
+                self.pos_y,
+            )
+        {
             // If succeeds
             self.matrix = self.perform_right_rotation(self.matrix);
             return true;
         }
         return false;
     }
-    
 
-    pub fn is_colliding(&self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], piece_matrix: [[u8; 4]; 4], pos_x: i32, pos_y: i32) -> bool {
-        // Be sure to not going out of the array index
-        /*
-        let temp_pos_y;
-        if pos_y <= 0 {
-            temp_pos_y = 0;
-        } else {
-            temp_pos_y = pos_y
-        }
-         */
-        // Detecting collisions
+    pub fn is_colliding(
+        &self,
+        game_grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize],
+        piece_matrix: [[u8; 4]; 4],
+        pos_x: i32,
+        pos_y: i32,
+    ) -> bool {
+        // We scan every line of the piece matrix
         for (line_index, line) in piece_matrix.iter().enumerate() {
+            // We scan every case of the piece matrix
             for (case_index, case) in line.iter().enumerate() {
-                // if we have a solid part into our matrix
-                /*
-                let temp_y = 0;
-                if *case != 0 && (pos_y/SQUARE_SIZE as i32 + line_index as i32) < 0 {
-                    temp_y = -(line_index as i32 * (SQUARE_SIZE as i32));
-                }
-                */
-
-
-                
-                if  *case != 0 && (// It needs to be a not empty case
-                    ((pos_x + (case_index*SQUARE_SIZE as usize) as i32) < 0) // Through the left
-                    || ((pos_x + (case_index*SQUARE_SIZE as usize) as i32) >= PIXEL_GRID_WIDTH as i32) // Through the right
-                    || ((pos_y/SQUARE_SIZE as i32 + line_index as i32) > 0 // the y index to not be negative otherwise there will be an overflow
-                        && game_grid // case in the grid corresponding needs to not be empty
-                            [(pos_y/SQUARE_SIZE as i32 + line_index as i32) as usize] // Y
-                            [(pos_x/SQUARE_SIZE as i32 + case_index as i32) as usize] != 0) // X
-                        ) {
-                    println!("pos_y={}, line_index={}", pos_y, line_index);
+                // If we find a not empty case
+                if *case != 0
+                    && (
+                        ((pos_x + (case_index*SQUARE_SIZE as usize) as i32) < 0) // Through the left
+                        || ((pos_x + (case_index*SQUARE_SIZE as usize) as i32) >= PIXEL_GRID_WIDTH as i32) // Through the right
+                        || ((pos_y/SQUARE_SIZE as i32 + line_index as i32) > 0 // the y index to not be negative otherwise there will be an overflow
+                            && game_grid // case in the grid corresponding needs to not be empty
+                                [(pos_y/SQUARE_SIZE as i32 + line_index as i32) as usize] // Y
+                                [(pos_x/SQUARE_SIZE as i32 + case_index as i32) as usize] != 0) // X
+                    )
+                {
                     return true;
                 }
             }
@@ -133,21 +106,36 @@ impl Piece {
         return false;
     }
 
-    fn is_placed(&self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], pos_y: i32) -> bool {
+    fn is_placed(
+        &self,
+        game_grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize],
+        pos_y: i32,
+    ) -> bool {
         for (line_index, line) in self.matrix.iter().enumerate() {
             for (case_index, case) in line.iter().enumerate() {
                 // if we have a solid part into our matrix
-                let temp_pos_y: i32 = if pos_y < 0 {0} else {pos_y};
-                if (*case != 0 && (pos_y + (SQUARE_SIZE*line_index as u32) as i32 >= (PIXEL_GRID_HEIGTH-SQUARE_SIZE) as i32))
-                    || *case != 0 && game_grid[line_index + 1 + (temp_pos_y/SQUARE_SIZE as i32) as usize][(case_index as i32 + self.pos_x/SQUARE_SIZE as i32) as usize] != 0 {
+                let temp_pos_y: i32 = if pos_y < 0 { 0 } else { pos_y };
+                if (*case != 0
+                    && (pos_y + (SQUARE_SIZE * line_index as u32) as i32
+                        >= (PIXEL_GRID_HEIGTH - SQUARE_SIZE) as i32))
+                    || *case != 0
+                        && game_grid[line_index + 1 + (temp_pos_y / SQUARE_SIZE as i32) as usize]
+                            [(case_index as i32 + self.pos_x / SQUARE_SIZE as i32) as usize]
+                            != 0
+                {
                     return true;
                 }
             }
         }
-        return false; 
+        return false;
     }
 
-    pub fn auto_set_placed(&mut self, game_grid:[[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize], pos_y: i32, speed: i32) -> bool {
+    pub fn auto_set_placed(
+        &mut self,
+        game_grid: [[u8; BOXES_GRID_WIDTH as usize]; BOXES_GRID_HEIGTH as usize],
+        pos_y: i32,
+        speed: i32,
+    ) -> bool {
         if self.is_placed(game_grid, pos_y + speed) {
             self.placed = true;
             self.pos_y += speed;
@@ -226,11 +214,11 @@ impl Piece {
         }
 
         return Self {
-            color: color, 
-            pos_x: ((PIXEL_GRID_WIDTH)/2) as i32, // Starting piece position into x axis
-            pos_y: -4 * SQUARE_SIZE as i32, // Starting piece position into y axis
+            color: color,
+            pos_x: ((PIXEL_GRID_WIDTH) / 2) as i32, // Starting piece position into x axis
+            pos_y: -4 * SQUARE_SIZE as i32,         // Starting piece position into y axis
             placed: false,
-            matrix: tetrimino};
+            matrix: tetrimino,
+        };
     }
-
 }

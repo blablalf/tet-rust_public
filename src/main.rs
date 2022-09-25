@@ -124,7 +124,7 @@ impl AppState {
                     self.grid
                         [line_index + (self.current_piece.pos_y / SQUARE_SIZE as i32) as usize]
                         [(case_index as i32 + (self.current_piece.pos_x / SQUARE_SIZE as i32))
-                            as usize] = get_color_number(self.current_piece.color);
+                            as usize] = get_color_number(self.current_piece);
                 }
             }
         }

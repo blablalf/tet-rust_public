@@ -28,7 +28,6 @@ use rand::Rng;
 
 #[derive(Copy, Clone)]
 pub struct Piece {
-    pub color: [f32; 4],
     pub pos_x: i32,
     pub pos_y: i32,
     pub placed: bool,
@@ -183,38 +182,7 @@ impl Piece {
             }
         }
 
-        let color;
-
-        // Getting a random piece and init tetrimino
-        match rng.gen_range(0..6) {
-            0 => {
-                color = RED;
-            }
-            1 => {
-                color = YELLOW;
-            }
-            2 => {
-                color = LIGHT_BLUE;
-            }
-            3 => {
-                color = BLUE;
-            }
-            4 => {
-                color = ORANGE;
-            }
-            5 => {
-                color = GREEN;
-            }
-            6 => {
-                color = PURPLE;
-            }
-            _ => {
-                color = RED;
-            }
-        }
-
         return Self {
-            color: color,
             pos_x: ((PIXEL_GRID_WIDTH) / 2) as i32, // Starting piece position into x axis
             pos_y: -4 * SQUARE_SIZE as i32,         // Starting piece position into y axis
             placed: false,

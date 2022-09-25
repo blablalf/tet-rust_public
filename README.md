@@ -39,5 +39,5 @@ Our game must be as close as possible to the official spec (see `doc/`).
 ## Bugs
 * If you complete too many lines at once, there is an overflow bug -> Fixed
 * The game over appears to soon -> Fixed
-* If you rotate the tetrimino at the last moment, it could possibly be badly placed
-* Can't reproduce but I managed once to not be able to rotate the piece
+* If you rotate the tetrimino at the last moment, it could possibly be badly placed // Looks like fixed ?! Maybe at the same time of the too soon game over bug
+* Can't reproduce but I managed once to not be able to rotate the piece -> Looks like fixed

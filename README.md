@@ -1,4 +1,4 @@
-# Tetrust: a crash course to Rust
+# Tetrust: Tetris in Rust
 
 ## Rationale
 
